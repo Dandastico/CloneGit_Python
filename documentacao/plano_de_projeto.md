@@ -112,5 +112,151 @@ Verificação do e-mail para certificar de que o usuário é o verdadeiro propri
 
 **RF01.1 Consultar Usuário**
 
+Consultar Usuário Permite que o usuário (ou administrador) visualize os dados cadastrais de um usuário existente.
+
+**RF01.2 Cadastrar Usuário Permite**
+
+A criação de um novo registro de usuário no sistema, incluindo a coleta de nome, e-mail e senha.
+
+**RF01.3 Validar Código**
+
+Processo de segurança que envolve a geração de um código de 6 dígitos, envio por e-mail, validação do código inserido pelo usuário e a opção de reenviar o código em caso de falha ou expiração.
+
+**RF01.4 Editar Usuário**
+
+Permite a modificação dos dados cadastrais de um usuário existente, como nome e senha.
+
+**RF01.5 Excluir Usuário**
+
+Permite a remoção permanente de um registro de usuário do sistema.
+
+**[RF02] Gerenciar login do usuário**
+
+Permitir que usuários autenticados acessem as funcionalidades do sistema.
+
+Este requisito abrange o processo de autenticação do usuário no sistema, garantindo que apenas usuários cadastrados e validados possam acessar as áreas restritas. Inclui a validação das credenciais (e-mail/senha) e o mecanismo de recuperação de senha.
+
+**Ator:** Aluno, Professor
+
+**Prioridade:**
+- (X) Essencial
+- ( ) Importante
+- ( ) Desejável
+
+**RF02.1 Validar Credencial**
+
+O sistema deve verificar se o e-mail e a senha fornecidos pelo usuário correspondem a um registro válido no banco de dados. A senha deve ser comparada após a criptografia.
+
+**RF02.2 Redefinir Senha (esquecer a senha)**
+
+Permite que o usuário inicie um processo de recuperação de senha, geralmente envolvendo o envio de um link ou código de segurança para o e-mail cadastrado, para que possa definir uma nova senha.
+
+
+
+
+**[RF03] Gerenciar atividades**
+
+Permitir que o Professor crie, configure e gerencie as atividades acadêmicas que serão submetidas pelos alunos.
+
+Este requisito é fundamental para o lado do Professor, permitindo a criação de um ambiente de submissão de código. O professor deve ser capaz de definir o escopo da atividade, o prazo, associar templates iniciais e configurar os testes unitários que serão usados na correção automática.
+
+**Ator:** Professor
+
+**Prioridade:**
+- (X) Essencial
+- ( ) Importante
+- ( ) Desejável
+
+**RF03.1 Criar Atividade**
+
+Permite ao Professor definir o título, descrição e parâmetros básicos de uma nova atividade.
+
+**RF03.2 Editar Atividade**
+
+Permite ao Professor modificar os detalhes de uma atividade que ainda não foi publicada ou que precisa de ajustes.
+
+**RF03.3 Excluir Atividade**
+
+Permite a remoção de uma atividade do sistema, desde que não haja submissões associadas ou que a exclusão seja permitida pelas regras de negócio.
+
+**RF03.4 Publicar/Ocultar Atividade**
+
+Permite ao Professor controlar a visibilidade da atividade para os alunos, tornando-a disponível para submissão ou ocultando-a temporariamente.
+
+**RF03.5 Definir Prazo de Entrega**
+
+Permite ao Professor estabelecer a data e hora limite para a submissão dos códigos pelos alunos.
+
+**RF03.6 Configurar Template Inicial**
+
+Permite ao Professor anexar ou configurar um arquivo de código inicial (template) que os alunos poderão baixar via terminal para começar a atividade.
+
+**RF03.7 Associar Testes Unitários à Atividade**
+
+Permite ao Professor vincular um conjunto de testes unitários (scripts de teste) que serão executados automaticamente contra o código submetido pelo aluno.
+
+**[RF04] Gerenciar Submissões de Código**
+
+Permitir que o Aluno envie seu código para correção e que o Professor visualize e gerencie essas submissões.
+
+Este requisito cobre o fluxo de trabalho principal do aluno, que é a submissão do código via terminal. Inclui a validação do formato do arquivo e a capacidade do Professor de listar e baixar os códigos submetidos.
+
+**Ator:** Aluno, Professor
+
+**Prioridade:**
+- (X) Essencial
+- ( ) Importante
+- ( ) Desejável
+
+**RF04.1 Enviar Código via Terminal**
+
+Permite ao Aluno executar um comando simplificado (e.g., edugit enviar) no terminal para fazer o upload do seu arquivo de código para o repositório do EduGit.
+
+**RF04.2 Validar Formato do Código**
+
+O sistema deve verificar se o arquivo submetido está no formato esperado (inicialmente, apenas arquivos Python .py) e se atende a quaisquer outras regras de formato.
+
+**RF04.3 Listar Submissões por Aluno**
+
+Permite ao Professor visualizar um histórico de todas as submissões feitas por um aluno específico para uma determinada atividade.
+
+**RF04.4 Download do Código Submetido**
+
+Permite ao Professor baixar o arquivo de código submetido por um aluno para análise manual, se necessário.
+
+**[RF05] Executar Testes Automatizados**
+
+Realizar a correção automática do código submetido pelo Aluno com base nos testes unitários configurados pelo Professor.
+
+Este requisito é o cerne da proposta de valor do EduGit, que é acelerar a correção. Ele detalha o processo de configuração, execução e geração de feedback dos testes unitários.
+
+**Ator:** Professor (Configuração), Sistema (Execução), Aluno (Visualização do Feedback)
+
+**Prioridade:**
+- (X) Essencial
+- ( ) Importante
+- ( ) Desejável
+
+**RF05.1 Configurar Testes Unitários**
+
+Permite ao Professor fazer o upload ou definir o código dos testes unitários que serão usados para avaliar as submissões.
+
+**RF05.2 Executar Testes no Servidor**
+
+O sistema deve ser capaz de rodar o código submetido pelo aluno em um ambiente seguro (sandbox) contra os testes unitários associados à atividade.
+
+**RF05.3 Gerar Relatórios de Testes**
+
+Após a execução, o sistema deve compilar um relatório detalhado indicando quais testes passaram e quais falharam, e a razão da falha.
+
+**RF05.4 Definir Casos de Testes**
+
+Permite ao Professor especificar os diferentes cenários de entrada e saída esperada para cada teste unitário.
+
+**RF05.5 Calcular Pontuação Automática**
+
+Com base no número de testes unitários que passaram, o sistema deve calcular automaticamente uma pontuação para a submissão do aluno.
+
+
 
 ## 7. DIAGRAMA DE ATIVIDADES
