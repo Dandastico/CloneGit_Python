@@ -57,9 +57,11 @@ Limitações:
   - RF01.4 - Editar Usuário
   - RF01.5 - Excluir Usuáario
 
+
 - RF02 - Gerenciar login do usuário
   - RF02.1 - Validar Credencial
   - RF02.2 - Redefinir Senha (esquecer a senha)
+
 
 - RF03 - Gerenciar atividades
   - RF03.1 - Criar Atividade
@@ -70,11 +72,13 @@ Limitações:
   - RF03.6 - Configurar Template Inicial
   - RF03.7 - Associar Testes Unitários à Atividade
 
+
 - RF04 - Gerenciar Submissões de Código
   - RF04.1 - Enviar Código via Terminal
   - RF04.2 - Validar Formato do Código
   - RF04.3 - Listar Submissões por Aluno
   - RF04.4 - Download do Código Subetido
+
 
 - RF05 - Executar Testes Automatizados
   - RF05.1 - Configurar Testes Unitários
@@ -92,6 +96,21 @@ Limitações:
 
 
 ## 6. ESPECIFICAÇÃO DOS REQUISITOS
+**[RF01]** Mander cadastro de Usuário
+Registrar novo usuário com gestão própria.
+
+Este requisito descreve todos os passos para realização do cadastro de um novo usuário no sistema em que o usuário insere **nome, email e senha** (todos salvos no MySQL, senha criptografada).
+
+Verificação do e-mail para certificar de que o usuário é o verdadeiro proprietário da conta. O processo inclui o envio de um código de verificação de 6 dígitos numéricos aleatórios para o email enviado, validação do código e a possibilidade de reenviar o código de verificação.
+
+**Ator:** Aluno, Professor
+
+**Prioridade:**
+- (X) Essencial
+- () Importante
+- () Desejável
+
+**RF01.1 Consultar Usuário**
 
 
 ## 7. DIAGRAMA DE ATIVIDADES
