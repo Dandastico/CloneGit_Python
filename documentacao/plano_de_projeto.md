@@ -357,7 +357,7 @@ flowchart TD
   H --> I[Servidor recebe<br>e valida submissão]
   I --> J[Executa testes<br>unitários em container Docker]
     
-  J --> K{Gera resultado<br>dos testes}
+  J --> K[Gera resultado<br>dos testes]
   K --> L[Exibe feedback<br>imediato no terminal]
     
   L --> M[Atualiza status<br>no Moodle]
@@ -407,3 +407,30 @@ flowchart TD
   style P fill:#4caf50,color:white
   style O fill:#ffcdd2
 ```
+
+#### Fluxograma do Professor
+```mermaid
+flowchart LR
+    P[Professor] --> C[Cria template<br>com TODOs]
+    C --> U[Upload para<br>sistema EduGit]
+    U --> D[Disponibiliza para<br>download dos alunos]
+    D --> S[Monitora submissões<br>em tempo real]
+    S --> F[Feedback automático<br>para alunos]
+```
+
+### Exemplificação do passo a passo do aluno pelo terminal
+Download do template:
+edugit baixar calculadora_basica
+
+Navega para pasta:
+cd calculadora_basica
+
+Abre no editor (exemplo):
+code atividade1.py
+(Desenvolve a solução - aluno implementa as funções TODOs)
+
+Testa localmente (opcional):
+edugit testar
+
+Envia para correção:
+edugit enviar calculadora_basica
