@@ -11,13 +11,15 @@ MSc. Edilberto M. Silva - prof.edilberto.silva@gmail.com
 **11/2025**
 
 ## 1. INTRODUÇÃO
-O objetivo deste documento é coletar, analisar e deifinir as necessiades e recursos de alto nível do projeto do **EduGit** que tem como objetivo organizar e gerenciar códigos dos professores e alunos que foram criados para as atividades acadêmicas pelo Moodle.
+O presente documento constitui o Plano de Projeto para o desenvolvimento do EduGit, um plug-in educacional para a plataforma Moodle. O objetivo primordial deste projeto é aprimorar a gestão e o fluxo de trabalho de atividades práticas de programação no ambiente acadêmico, especificamente para alunos e professores da Faculdade SENAC-DF.
 
-O projeto EduGit também visa criar uma plataforma de testes do código dos alunos, seguindo os casos de uso estabelecidos pelos professores, para acelerar a correção das atividades e a entrega do feedback para os alunos.
+O EduGit propõe-se a ser **um sistema de controle de versão simplificado**, integrado ao Moodle, que visa organizar e gerenciar os códigos-fonte desenvolvidos por alunos em suas atividades. Sua funcionalidade central reside na capacidade de simular um repositório na nuvem, similar ao GitHub, permitindo que os alunos submetam suas soluções via comandos simplificados de terminal.
 
-O EduGit é um sistema de controle de versão, como o Git, por onde os alunos conseguem baixar os códigos desenvolvidos pelos professores para o ambiente de programação local. Ao realizar as atividades propostas pelos professores, os alunos conseguem enviar suas soluções para o plug-in do Moodle que será desenvolvido, um repositório na nuvem que funcionará como uma versão simplificada do GitHub.
+Um diferencial estratégico do EduGit é a incorporação de uma **plataforma de testes automatizados**. Esta funcionalidade permitirá aos professores configurar testes unitários que serão executados automaticamente contra o código submetido pelos alunos. Este mecanismo tem o propósito de acelerar significativamente o processo de correção das atividades e fornecer feedback imediato e objetivo aos estudantes, alinhando-se a modelos de ensino de programação de alta performance.
 
-Além das funções de sistema de controle de versão, o EduGit permite ao professor cria pequenos testes unitários para testar o código dos alunos. Com esses testes, os alunos tem a opção de experimentar suas soluções antes de enviar o código para a correção do professor.
+Este Plano de Projeto detalha o escopo, os objetivos de alto nível, os requisitos funcionais, a estrutura de trabalho e o cronograma proposto para a entrega da primeira versão funcional do EduGit até o final do semestre letivo vigente (27/11/2025). O sucesso do projeto será medido pela sua capacidade de fornecer uma ferramenta robusta e eficiente que otimize o processo de ensino-aprendizagem de programação na instituição
+
+
 
 ## 2. DESCRIÇÃO DO PROJETO
 
