@@ -96,6 +96,82 @@ Limitações:
 
 ## 5. MODELO ENTIDADE E RELACIONAMENTO (MER)
 
+```mermaid
+erDiagram
+  USUARIO {
+      int id PK
+      varchar nome
+      varchar email UK
+      varchar senha_hash
+      varchar tipo_usuario
+      varchar codigo_validacao
+      datetime data_cadastro
+  }
+    
+  CURSO_GRADUACAO {
+      int id PK
+      varchar nome_curso
+  }
+    
+  TURMA {
+      int id PK
+      int curso_graduacao_id FK
+      varchar nome_turma
+      varchar semestre
+  }
+  
+  TURMA_USUARIO {
+      int usuario_id PK,FK
+      int turma_id PK,FK
+      varchar papel
+  }
+    
+  ATIVIDADE {
+      int id PK
+      int turma_id FK
+      varchar titulo
+      text descricao
+      datetime prazo_entrega
+      varchar template_path
+      int pontuacao_maxima
+  }
+    
+  TESTE_UNITARIO {
+      int id PK
+      int atividade_id FK
+      varchar nome_teste
+      text codigo_teste
+      int peso_pontuacao
+  }
+    
+  SUBMISSAO {
+      int id PK
+      int usuario_id FK
+      int atividade_id FK
+      datetime data_submissao
+      varchar arquivo_path
+      float pontuacao_final
+  }
+    
+  RESULTADO_TESTE {
+      int id PK
+      int submissao_id FK
+      int teste_unitario_id FK
+      boolean passou
+      text log_erro
+      float pontuacao_obtida
+  }
+
+  USUARIO ||--o{ TURMA_USUARIO : "pertence"
+  TURMA ||--o{ TURMA_USUARIO : "contém"
+  CURSO_GRADUACAO ||--o{ TURMA : "oferece"
+  TURMA ||--o{ ATIVIDADE : "possui"
+  ATIVIDADE ||--o{ SUBMISSAO : "recebe"
+  USUARIO ||--o{ SUBMISSAO : "realiza"
+  ATIVIDADE ||--o{ TESTE_UNITARIO : "configura"
+  SUBMISSAO ||--o{ RESULTADO_TESTE : "gera"
+  TESTE_UNITARIO ||--o{ RESULTADO_TESTE : "avalia"
+```
 
 ## 6. ESPECIFICAÇÃO DOS REQUISITOS
 **[RF01]** Mander cadastro de Usuário
@@ -261,4 +337,102 @@ Com base no número de testes unitários que passaram, o sistema deve calcular a
 
 
 
-## 7. DIAGRAMA DE ATIVIDADES
+## 7. DIAGRAMA DE ATIVIDADES E FLUXOGRAMAS
+
+#### Fluxograma para envio das soluções
+```mermaid
+flowchart TD
+  A[Aluno abre terminal] --> B[Digita comando<br>'edugit enviar atividade1']
+    
+  B --> C{Sistema verifica<br>autenticação}
+  C -->|Não autenticado| D[Executa login<br>edugit login]
+  C -->|Já autenticado| E[Valida estrutura<br>do código]
+    
+  D --> E
+    
+  E --> F{Validação aprovada?}
+  F -->|Não| G[Exibe erro específico<br>Ex: “Função X não encontrada”]
+  F -->|Sim| H[Compacta e envia<br>código para servidor]
+    
+  G --> B
+    
+  H --> I[Servidor recebe<br>e valida submissão]
+  I --> J[Executa testes<br>unitários em container Docker]
+    
+  J --> K[Gera resultado<br>dos testes]
+  K --> L[Exibe feedback<br>imediato no terminal]
+    
+  L --> M[Atualiza status<br>no Moodle]
+  M --> N[🎉 Submissão<br>concluída com sucesso!]
+    
+  %% Estilização
+  style A fill:#e1f5fe
+  style B fill:#f3e5f5
+  style L fill:#c8e6c9
+  style N fill:#4caf50,color:white
+  style G fill:#ffcdd2
+```
+
+#### Flucograma para escrever as soluções seguindo template do professor
+```mermaid
+flowchart TD
+  A[Aluno: edugit baixar atividade1] --> B[Busca template do professor]
+    
+  B --> C[Download do código base<br>para pasta local]
+  C --> D[Estrutura recebida:<br>atividade1.py<br>README.md<br>testes_unitarios.py]
+    
+  D --> E[Aluno abre editor<br>e analisa código]
+  E --> F[Identifica funções<br>incompletas TODO]
+    
+  F --> G[Desenvolve solução<br>nas áreas marcadas]
+    
+  G --> H[Teste local opcional<br>edugit testar-local]
+  H --> I{Testes passam<br>localmente?}
+  I -->|Não| G
+  I -->|Sim| J[Envio para correção<br>edugit enviar atividade1]
+    
+  J --> K[Validação automática<br>do formato]
+  K --> L[Execução em container<br>Docker seguro]
+  L --> M[Feedback imediato<br>com detalhes]
+    
+  M --> N{Submissão<br>bem-sucedida?}
+  N -->|Não| O[Corrigir problemas<br>e reenviar]
+  N -->|Sim| P[🎉 Código aceito!<br>Nota no Moodle]
+    
+  O --> G
+    
+  %% Estilos
+  style A fill:#e1f5fe
+  style C fill:#f3e5f5
+  style G fill:#fff9c4
+  style H fill:#ffecb3
+  style P fill:#4caf50,color:white
+  style O fill:#ffcdd2
+```
+
+#### Fluxograma do Professor
+```mermaid
+flowchart LR
+    P[Professor] --> C[Cria template<br>com TODOs]
+    C --> U[Upload para<br>sistema EduGit]
+    U --> D[Disponibiliza para<br>download dos alunos]
+    D --> S[Monitora submissões<br>em tempo real]
+    S --> F[Feedback automático<br>para alunos]
+```
+
+### Exemplificação do passo a passo do aluno pelo terminal
+Download do template:
+edugit baixar calculadora_basica
+
+Navega para pasta:
+cd calculadora_basica
+
+Abre no editor (exemplo):
+code atividade1.py
+(Desenvolve a solução - aluno implementa as funções TODOs)
+
+Testa localmente (opcional):
+edugit testar
+
+Envia para correção:
+edugit enviar calculadora_basica
