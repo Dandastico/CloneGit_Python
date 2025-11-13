@@ -54,10 +54,9 @@ Limitações:
 - RF01 - Manter cadastro de usuário
   - RF01.1 - Consultar Usuário
   - RF01.2 - Cadastrar Usuário
-  - RF01.3 - Validar Código
-    - Gerar código, enviar e-mail, validar código, reenviar código
+  - RF01.3 - Validar Email
+    - Gerar link de validação, enviar por email
   - RF01.4 - Editar Usuário
-  - RF01.5 - Excluir Usuáario
 
 
 - RF02 - Gerenciar login do usuário
@@ -174,6 +173,14 @@ erDiagram
 ```
 
 ## 6. ESPECIFICAÇÃO DOS REQUISITOS
+
+.imagem-projeto {
+    max-width: 45%;
+    height: auto;
+    display: inline-block;
+    margin: 10px;
+}
+
 **[RF01]** Mander cadastro de Usuário
 Registrar novo usuário com gestão própria.
 
@@ -192,21 +199,17 @@ Verificação do e-mail para certificar de que o usuário é o verdadeiro propri
 
 Consultar Usuário Permite que o usuário (ou administrador) visualize os dados cadastrais de um usuário existente.
 
-**RF01.2 Cadastrar Usuário Permite**
+**RF01.2 Cadastrar Usuário**
 
-A criação de um novo registro de usuário no sistema, incluindo a coleta de nome, e-mail e senha.
+Permite a criação de um novo registro de usuário no sistema, incluindo a coleta de nome, e-mail e senha.
 
-**RF01.3 Validar Código**
+**RF01.3 Validar Email**
 
-Processo de segurança que envolve a geração de um código de 6 dígitos, envio por e-mail, validação do código inserido pelo usuário e a opção de reenviar o código em caso de falha ou expiração.
+Processo de segurança que envolve a de um link, enviado para o e-mail cadastrado pelo usuário, para confirmar o e-mail do usuário.
 
 **RF01.4 Editar Usuário**
 
-Permite a modificação dos dados cadastrais de um usuário existente, como nome e senha.
-
-**RF01.5 Excluir Usuário**
-
-Permite a remoção permanente de um registro de usuário do sistema.
+Permite a modificação dos dados cadastrais de um usuário existente, como email e senha.
 
 **[RF02] Gerenciar login do usuário**
 
@@ -228,7 +231,6 @@ O sistema deve verificar se o e-mail e a senha fornecidos pelo usuário correspo
 **RF02.2 Redefinir Senha (esquecer a senha)**
 
 Permite que o usuário inicie um processo de recuperação de senha, geralmente envolvendo o envio de um link ou código de segurança para o e-mail cadastrado, para que possa definir uma nova senha.
-
 
 
 
