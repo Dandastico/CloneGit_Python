@@ -433,17 +433,130 @@ Permite a remoção de uma atividade do sistema, desde que não haja submissões
 
 Permite ao Professor controlar a visibilidade da atividade para os alunos, tornando-a disponível para submissão ou ocultando-a temporariamente.
 
+Descrição: Este requisito permite que um professor controle a visibilidade de uma atividade, tornando-a disponível ou indisponível para os alunos.
+
+Ator Principal: Professor
+
+Prioridade: Essencial
+
+Passo-a-Passo:
+
+1. O professor acessa o menu "Atividades" e seleciona uma atividade.
+
+2. O sistema exibe a página de detalhes da atividade com um botão "Publicar" (se o status for "Rascunho") ou "Ocultar" (se o status for "Publicada").
+
+3. Se o professor clicar em "Publicar":
+  - O sistema verifica se a atividade possui um template inicial configurado (RF03.6).
+  - O sistema verifica se a atividade possui pelo menos um teste unitário configurado (RF03.7).
+  - Se alguma configuração obrigatória estiver faltando, o sistema exibe uma mensagem de erro indicando o que falta.
+4. Se todas as configurações obrigatórias estiverem presentes, o professor clica em "Confirmar Publicação".
+5. O sistema:
+  - Altera o status da atividade para "Publicada".
+  - Torna a atividade visível para todos os alunos da turma.
+  - Registra a data e hora da publicação.
+6. O sistema exibe a mensagem: "Atividade publicada com sucesso. Os alunos podem começar a trabalhar nela".
+7. Se o professor clicar em "Ocultar":
+  - O sistema altera o status da atividade para "Oculta".
+  - A atividade fica invisível para os alunos (mas os dados históricos são preservados).
+  - O sistema exibe a mensagem: "Atividade ocultada com sucesso".
+
+**Resultado Esperado:** O status da atividade é alterado, controlando sua visibilidade para os alunos.
+
+
 **RF03.5 Definir Prazo de Entrega**
 
 Permite ao Professor estabelecer a data e hora limite para a submissão dos códigos pelos alunos.
+
+1. Durante a criação (RF03.1) ou edição (RF03.2) de uma atividade, o professor preenche o campo "Prazo de Entrega".
+
+2. O sistema exibe um seletor de data e hora, permitindo que o professor escolha:
+  - A data limite (ex: 15/11/2025).
+  - A hora limite (ex: 23:59).
+3. O professor seleciona a data e hora desejadas.
+
+4. O sistema valida se a data/hora é futura (não pode ser uma data passada).
+
+5. Se a data for inválida, o sistema exibe a mensagem: "O prazo deve ser uma data futura".
+
+6. Se a data for válida, o sistema armazena o prazo no banco de dados.
+
+7. Quando o prazo se aproxima, o sistema pode enviar notificações automáticas aos alunos (funcionalidade opcional).
+
+8. Após o prazo expirar, o sistema:
+  - Impede que novos códigos sejam submetidos.
+  - Exibe uma mensagem aos alunos: "O prazo para esta atividade expirou. Você não pode mais submeter soluções".
+  - Permite que o professor ainda visualize e corrija as submissões existentes.
+
+**Resultado Esperado:** O prazo de entrega é definido e o sistema controla as submissões com base nele.
+
 
 **RF03.6 Configurar Template Inicial**
 
 Permite ao Professor anexar ou configurar um arquivo de código inicial (template) que os alunos poderão baixar via terminal para começar a atividade.
 
+1. Durante a criação ou edição de uma atividade, o professor acessa a seção "Template Inicial".
+
+2. O sistema exibe um editor de código ou um campo de upload de arquivo.
+
+3. O professor pode:
+  - Opção A - Escrever o código diretamente: Digita ou cola o código do template no editor de código fornecido.
+  - Opção B - Fazer upload de um arquivo: Clica em "Fazer Upload" e seleciona um arquivo .py do seu computador.
+
+4. O professor insere o código do template (ex: uma função com assinatura definida, mas corpo vazio).
+
+5. O professor clica em "Salvar Template".
+
+6. O sistema valida o código:
+  - Verifica se o arquivo é um arquivo Python válido (extensão .py).
+  - Verifica se o código não contém erros de sintaxe (compilação básica).
+
+7. Se houver erros de validação, o sistema exibe mensagens de erro.
+
+8. Se o código for válido, o sistema:
+  - Armazena o template no banco de dados.
+  - Exibe a mensagem: "Template configurado com sucesso".
+
+9. Quando um aluno inicia a atividade (RF04.1), o sistema fornece automaticamente uma cópia do template para que ele comece a trabalhar.
+
+**Resultado Esperado:** Um template inicial é configurado e será fornecido aos alunos quando iniciarem a atividade.
+
+
 **RF03.7 Associar Testes Unitários à Atividade**
 
 Permite ao Professor vincular um conjunto de testes unitários (scripts de teste) que serão executados automaticamente contra o código submetido pelo aluno.
+
+1. Durante a criação ou edição de uma atividade, o professor acessa a seção "Configurar Testes".
+
+2. O sistema exibe uma interface para adicionar testes unitários.
+
+3. O professor clica em "Adicionar Novo Teste".
+
+4. O sistema exibe um formulário com os seguintes campos:
+  - Nome do Teste (obrigatório): ex: "Teste de Entrada Válida"
+  - Descrição (obrigatório): descrição do que o teste valida
+  - Código do Teste (obrigatório): código Python do teste unitário (usando framework como unittest ou pytest)
+  - Peso do Teste (obrigatório): percentual de pontuação (ex: 20%)
+
+5. O professor preenche todos os campos.
+
+6. O professor clica em "Salvar Teste".
+
+7. O sistema valida o código do teste:
+  - Verifica se é um código Python válido.
+  - Verifica se o teste segue a estrutura esperada (ex: função que retorna True/False ou usa assertions).
+
+8. Se houver erros, o sistema exibe mensagens de erro.
+
+9. Se o código for válido, o sistema armazena o teste no banco de dados e associa à atividade.
+
+10. O professor pode adicionar múltiplos testes para a mesma atividade.
+
+11. O sistema verifica se a soma dos pesos de todos os testes é 100%.
+
+12. Quando um aluno submeter código (RF04.1), os testes configurados serão executados automaticamente (RF05.2).
+
+**Resultado Esperado:** Testes unitários são configurados e serão executados automaticamente nas submissões dos alunos.
+
 
 **[RF04] Gerenciar Submissões de Código**
 
@@ -467,6 +580,43 @@ Permite ao Aluno executar um comando simplificado (e.g., edugit enviar) no termi
 ```
 *Comando CLI inserido no terminal para enviar atividade*
 
+1. O aluno acessa a atividade no EduGit, copia o comando CLI para baixar a atividade e a executa em seu terminal.
+
+2. O sistema fornece ao aluno:
+  - Um arquivo de template inicial (se configurado em RF03.6).
+  - Instruções de como submeter o código.
+  - Um token de autenticação único para a atividade.
+
+3. O aluno trabalha localmente em seu computador, desenvolvendo a solução.
+
+4. Quando o aluno termina, ele abre o terminal em seu computador.
+
+5. O aluno navega até o diretório contendo seu código.
+
+6.  aluno executa o comando de submissão fornecido pelo EduGit:
+
+7. O cliente EduGit (instalado no computador do aluno) valida o arquivo (veja RF04.2).
+
+8. Se o arquivo for válido, o cliente envia o código para o servidor EduGit via HTTPS.
+
+9. O servidor recebe o código e:
+  - Armazena o arquivo no sistema de arquivos do servidor (em um diretório específico para a submissão).
+  - Cria um registro de submissão no banco de dados com:
+    - ID da atividade
+    - ID do aluno
+    - Timestamp da submissão
+    - Caminho do arquivo armazenado
+    - Status: "Recebida"
+
+10. O servidor inicia automaticamente a execução dos testes (RF05.2).
+
+11. O cliente exibe uma mensagem de sucesso: "Código enviado com sucesso! Os testes estão sendo executados...".
+
+12. O aluno pode verificar o status da submissão acessando a atividade no EduGit.
+
+**Resultado Esperado:** O código do aluno é enviado com sucesso e os testes são iniciados automaticamente.
+
+
 **RF04.2 Validar Formato do Código**
 
 O sistema deve verificar se o arquivo submetido está no formato esperado (inicialmente, apenas arquivos Python .py) e se atende a quaisquer outras regras de formato.
@@ -485,11 +635,59 @@ O sistema deve verificar se o arquivo submetido está no formato esperado (inici
 ```
 *Resposta do sistema visto pelo terminal quando o código não foi validado de acordo com o template do professor*
 
+
+1. Quando um aluno tenta enviar código via terminal (RF04.1), o cliente EduGit valida o arquivo localmente.
+
+2. O sistema verifica:
+  - Extensão do arquivo: Deve ser .py (para Python).
+  - Tamanho do arquivo: Não deve exceder 10 MB.
+  - Sintaxe Python: O arquivo deve ser um código Python válido (sem erros de sintaxe).
+  - Presença de funções obrigatórias: Se o template definir funções que devem estar presentes, o sistema verifica se existem.
+
+3. Se alguma validação falhar, o sistema exibe uma mensagem de erro específica:
+  - "Arquivo inválido: extensão não é .py"
+  - "Arquivo muito grande (máximo 10 MB)"
+  - "Erro de sintaxe na linha X: ..."
+  - "Função obrigatória 'funcao_principal' não encontrada"
+
+4. Se todas as validações passarem, o arquivo é aceito e enviado ao servidor.
+
+5. O servidor também realiza validações adicionais:
+  - Verifica novamente a sintaxe.
+  - Verifica se o arquivo não contém código malicioso (verificação básica).
+
+6. Se o servidor detectar problemas, a submissão é rejeitada e o aluno recebe uma mensagem de erro.
+
+**Resultado Esperado:** Apenas arquivos válidos são aceitos para submissão.
+
+
 **RF04.3 Listar Submissões por Aluno**
 
 Permite ao Professor visualizar um histórico de todas as submissões feitas por um aluno específico para uma determinada atividade.
 
+1. O aluno acessa uma atividade no EduGit.
+
+2. O aluno clica em "Meu Histórico de Submissões".
+
+3. O sistema exibe uma tabela com todas as submissões do aluno para essa atividade, incluindo:
+  - Data/Hora da Submissão: ex: "15/11/2025 14:30"
+  - Status: "Recebida", "Testando", "Testes Concluídos", "Erro"
+  - Pontuação: ex: "85/100" (se os testes foram executados)
+  - Ações: Botão para visualizar detalhes, baixar código, visualizar relatório de testes
+
+4. O aluno pode clicar em uma submissão específica para ver:
+  - O código enviado.
+  - O resultado detalhado dos testes (quais passaram, quais falharam).
+  - Feedback automático sobre erros (se disponível).
+
+5. O aluno pode fazer quantas submissões desejar até o prazo (RF03.5).
+
+6. O sistema mantém um histórico completo de todas as submissões.
+
+**Resultado Esperado:** O aluno pode visualizar todas as suas submissões e seus resultados.
+
 <img src="./imagens/EduGit_Wireframe/Exercicios-Aluno.png" alt="Tela da visão do professor da atividade" style="max-width: 600px; height: auto; display: inline-block; margin: 10px;">
+
 
 **RF04.4 Download do Código Submetido**
 
@@ -501,6 +699,26 @@ Permite ao Professor baixar o arquivo de código submetido por um aluno para an�
 >>> edugit baixar atividade-maneira <nome do aluno>
 ```
 *Comando CLI para baixar código de um aluno específico, de uma atividade específica*
+
+1. O aluno acessa o histórico de submissões (RF04.3) ou o professor acessa a lista de submissões de uma atividade.
+
+2. O usuário seleciona uma submissão específica.
+
+3. O sistema exibe os detalhes da submissão com um botão "Baixar Código" ou executa comando no terminal.
+
+4. O usuário clica em "Baixar Código".
+
+5. O sistema:
+  - Recupera o arquivo de código do servidor de arquivos.
+  - Comprime o arquivo (se necessário).
+  - Inicia o download para o computador do usuário.
+
+6. O arquivo é salvo com um nome descritivo, ex: atividade_10_joao_silva_15_11_2025.py.
+
+7. O sistema registra o download no histórico de atividades (para auditoria).
+
+**Resultado Esperado:** O arquivo de código é baixado com sucesso para o computador do usuário.
+
 
 **[RF05] Executar Testes Automatizados**
 
@@ -522,6 +740,29 @@ Permite ao Professor fazer o upload ou definir o código dos testes unitários q
 <img src="./imagens/EduGit_Wireframe/Execicio Criacao.png" alt="Tela da visão do professor da atividade" style="max-width: 600px; height: auto; display: inline-block; margin: 10px;">
 
 *A inserção do código teste é realizado no mesmo local que a criação da ativdade, ou a edição dela*
+
+1. O professor acessa uma atividade e clica em "Configurar Testes".
+
+2. O sistema exibe uma interface para gerenciar testes (detalhes em RF03.7).
+
+3. O professor pode:
+  - Adicionar novos testes.
+  - Editar testes existentes.
+  - Remover testes.
+  - Definir o peso de cada teste na pontuação final.
+
+4. O professor clica em "Salvar Configuração de Testes".
+
+5. O sistema valida a configuração:
+  - Verifica se há pelo menos um teste configurado.
+  - Verifica se a soma dos pesos é 100%.
+
+6. Se houver erros, o sistema exibe mensagens de erro.
+
+7. Se a configuração for válida, o sistema armazena os testes e ativa a execução automática.
+
+**Resultado Esperado:** Os testes são configurados e prontos para serem executados nas submissões.
+
 
 **RF05.2 Executar Testes no Servidor**
 
@@ -574,6 +815,34 @@ A solução será corrigida em: 27/11/2025
 ``` 
 *Mensagens no terminal após enviar a solução para uma atividade com os testes privados*
 
+1. Quando um aluno submete código (RF04.1), o servidor EduGit recebe o arquivo.
+
+2. O servidor cria um ambiente isolado (sandbox/container) para executar os testes.
+
+3. O servidor copia o arquivo de código do aluno para o ambiente isolado.
+
+4. O servidor copia o arquivo de template (se houver) para o ambiente isolado.
+
+5. O servidor copia os testes unitários configurados para o ambiente isolado.
+
+6. O servidor executa cada teste unitário no ambiente isolado:
+  - Executa o teste usando o framework Python (ex: pytest ou unittest).
+  - Captura a saída do teste (stdout, stderr).
+  - Registra o resultado (passou/falhou).
+  - Registra o tempo de execução.
+
+7. Se um teste falhar, o servidor captura a mensagem de erro.
+
+8. Se um teste exceder um tempo limite de execução (ex: 30 segundos), o servidor interrompe a execução e marca como "Timeout".
+
+9. O servidor limpa o ambiente isolado após a execução.
+
+10. O servidor armazena os resultados no banco de dados.
+
+11. O servidor inicia a geração do relatório de testes (RF05.3).
+
+**Resultado Esperado:** Os testes são executados com segurança em um ambiente isolado e os resultados são registrados.
+
 
 **RF05.3 Gerar Relatórios de Testes**
 
@@ -583,14 +852,97 @@ Após a execução, o sistema deve compilar um relatório detalhado indicando qu
 
 *Relatório gerado pelo sistema, disponível no Moodle*
 
+1. Após a execução dos testes (RF05.2), o servidor gera um relatório.
+
+2. O relatório inclui:
+  - Resumo Geral: Total de testes, testes aprovados, testes reprovados, taxa de sucesso (%).
+  - Detalhes de Cada Teste:
+  - Nome do teste.
+  - Status (Passou/Falhou/Timeout).
+  - Tempo de execução.
+  - Mensagem de erro (se falhou).
+  - Pontuação Obtida: ex: "85/100"
+  - Feedback Automático: Sugestões de correção (se disponível).
+
+3. O relatório é armazenado no banco de dados e associado à submissão.
+
+4. O relatório é exibido ao aluno na interface web:
+  - O aluno acessa o histórico de submissões (RF04.3).
+  - O aluno clica em "Ver Relatório de Testes".
+  - O sistema exibe o relatório em um formato legível e visual.
+
+5. O professor também pode visualizar o relatório:
+  - O professor acessa a lista de submissões de uma atividade.
+  - O professor clica em uma submissão específica.
+  - O sistema exibe o relatório detalhado.
+
+6. O relatório pode ser exportado em formato PDF ou CSV (funcionalidade opcional).
+
+**Resultado Esperado:** Um relatório detalhado dos testes é gerado e disponibilizado ao aluno e ao professor.
+
+
 **RF05.4 Definir Casos de Testes**
 
 Permite ao Professor especificar os diferentes cenários de entrada e saída esperada para cada teste unitário.
+
+1. Durante a configuração de testes (RF05.1 ou RF03.7), o professor define casos de teste.
+
+2. Para cada teste, o professor pode definir múltiplos casos de teste:
+  - Entrada: Dados que serão passados para a função (ex: [3, 1, 4, 1, 5]).
+  - Saída Esperada: O resultado esperado (ex: [1, 1, 3, 4, 5]).
+  - Descrição: Uma descrição do caso (ex: "Teste com lista desordenada").
+
+3. O professor pode adicionar quantos casos de teste desejar.
+
+4. O professor clica em "Salvar Casos de Teste".
+
+5. O sistema valida os casos de teste:
+  - Verifica se a entrada e saída são válidas (formato correto).
+  - Verifica se há pelo menos um caso de teste por teste unitário.
+
+6. Se houver erros, o sistema exibe mensagens de erro.
+
+7. Se forem válidos, o sistema armazena os casos de teste.
+
+8. Durante a execução dos testes (RF05.2), cada caso de teste é executado:
+  - A entrada é passada para a função do aluno.
+  - A saída é comparada com a saída esperada.
+  - O resultado é registrado.
+
+**Resultado Esperado:** Casos de teste são definidos e executados para validar o código do aluno.
+
+
 
 **RF05.5 Calcular Pontuação Automática**
 
 Com base no número de testes unitários que passaram, o sistema deve calcular automaticamente uma pontuação para a submissão do aluno.
 
+1. Após a execução de todos os testes (RF05.2), o servidor calcula a pontuação.
+
+2. O cálculo é realizado da seguinte forma:
+  - Para cada teste: Se o teste passou, o aluno recebe 100% do peso desse teste. Se falhou, recebe 0%.
+  - Pontuação Total: Soma dos pesos de todos os testes aprovados.
+  - Pontuação Final: (Pontuação Total / 100) × Pontuação Máxima da Atividade.
+
+3. Exemplo:
+  - Atividade com pontuação máxima de 100 pontos.
+  - 5 testes, cada um com peso 20%.
+  - Aluno passou em 4 testes (80%) e falhou em 1 (20%).
+  - Pontuação Final = (80 / 100) × 100 = 80 pontos.
+
+4. O servidor armazena a pontuação no banco de dados.
+
+5. O servidor atualiza o livro de notas do Moodle (se integrado) com a pontuação.
+
+6. O aluno visualiza sua pontuação:
+  - No histórico de submissões (RF04.3).
+  - No relatório de testes (RF05.3).
+
+7. O professor visualiza as pontuações de todos os alunos:
+  - Em um painel de notas da atividade.
+  - Em um relatório geral da turma.
+
+**Resultado Esperado:** A pontuação do aluno é calculada automaticamente com base no desempenho nos testes.
 
 
 ## 7. DIAGRAMA DE ATIVIDADES E FLUXOGRAMAS
