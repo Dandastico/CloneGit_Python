@@ -174,14 +174,7 @@ erDiagram
 
 ## 6. ESPECIFICAÇÃO DOS REQUISITOS
 
-.imagem-projeto {
-    max-width: 45%;
-    height: auto;
-    display: inline-block;
-    margin: 10px;
-}
-
-**[RF01]** Mander cadastro de Usuário
+**[RF01]** Manter cadastro de Usuário
 Registrar novo usuário com gestão própria.
 
 Este requisito descreve todos os passos para realização do cadastro de um novo usuário no sistema em que o usuário insere **nome, email e senha** (todos salvos no MySQL, senha criptografada).
@@ -197,19 +190,25 @@ Verificação do e-mail para certificar de que o usuário é o verdadeiro propri
 
 **RF01.1 Consultar Usuário**
 
-Consultar Usuário Permite que o usuário (ou administrador) visualize os dados cadastrais de um usuário existente.
+Consultar Usuário Permite que o usuário visualize seus dados cadastrais.
 
 **RF01.2 Cadastrar Usuário**
 
-Permite a criação de um novo registro de usuário no sistema, incluindo a coleta de nome, e-mail e senha.
+Permite a criação de um novo registro de usuário no sistema, incluindo a coleta de e-mail e senha.
+
+<img src="./imagens/EduGit_Wireframe/Cadastro.png" alt="Tela 1" style="max-width: 600px; height: auto; display: inline-block; margin: 10px;">
 
 **RF01.3 Validar Email**
 
 Processo de segurança que envolve a de um link, enviado para o e-mail cadastrado pelo usuário, para confirmar o e-mail do usuário.
 
+<img src="./imagens/EduGit_Wireframe/Confirmar Email.png" alt="Tela 1" style="max-width: 600px; height: auto; display: inline-block; margin: 10px;">
+
 **RF01.4 Editar Usuário**
 
 Permite a modificação dos dados cadastrais de um usuário existente, como email e senha.
+
+<img src="./imagens/EduGit_Wireframe/Trocar Senha.png" alt="Tela 1" style="max-width: 600px; height: auto; display: inline-block; margin: 10px;">
 
 **[RF02] Gerenciar login do usuário**
 
@@ -228,11 +227,13 @@ Este requisito abrange o processo de autenticação do usuário no sistema, gara
 
 O sistema deve verificar se o e-mail e a senha fornecidos pelo usuário correspondem a um registro válido no banco de dados. A senha deve ser comparada após a criptografia.
 
+<img src="./imagens/EduGit_Wireframe/LogIn.png" alt="Tela 1" style="max-width: 600px; height: auto; display: inline-block; margin: 10px;">
+
 **RF02.2 Redefinir Senha (esquecer a senha)**
 
 Permite que o usuário inicie um processo de recuperação de senha, geralmente envolvendo o envio de um link ou código de segurança para o e-mail cadastrado, para que possa definir uma nova senha.
 
-
+<img src="./imagens/EduGit_Wireframe/Esqueceu Senha.png" alt="Tela 1" style="max-width: 600px; height: auto; display: inline-block; margin: 10px;">
 
 **[RF03] Gerenciar atividades**
 
@@ -246,6 +247,12 @@ Este requisito é fundamental para o lado do Professor, permitindo a criação d
 - (X) Essencial
 - ( ) Importante
 - ( ) Desejável
+
+<img src="./imagens/EduGit_Wireframe/Exercicios-Professor.png" alt="Tela com lista das atividades da turma" style="max-width: 600px; height: auto; display: inline-block; margin: 10px;">
+
+<img src="./imagens/EduGit_Wireframe/Execicio Criacao.png" alt="Tela de criação de atividade" style="max-width: 600px; height: auto; display: inline-block; margin: 10px;">
+
+<img src="./imagens/EduGit_Wireframe/Exercicio-VisaoProfessor.png" alt="Tela da visão do professor da atividade" style="max-width: 600px; height: auto; display: inline-block; margin: 10px;">
 
 **RF03.1 Criar Atividade**
 
@@ -292,17 +299,45 @@ Este requisito cobre o fluxo de trabalho principal do aluno, que é a submissão
 
 Permite ao Aluno executar um comando simplificado (e.g., edugit enviar) no terminal para fazer o upload do seu arquivo de código para o repositório do EduGit.
 
+```bash
+>>> edugit enviar atividade-maneira
+```
+*Comando CLI inserido no terminal para enviar atividade*
+
 **RF04.2 Validar Formato do Código**
 
 O sistema deve verificar se o arquivo submetido está no formato esperado (inicialmente, apenas arquivos Python .py) e se atende a quaisquer outras regras de formato.
+
+```bash
+>>> Vertificando estrutura do código...
+>>> Funções exigidas pela atividade encontradas...
+>>> Envio concluído
+```
+*Resposta do sistema visto pelo terminal do código validado de acordo com template do professor*
+
+```bash
+>>> Verificando estrutura do código...
+>>> Funcções exigidas não encontradas.
+>>> Envio cancelado!
+```
+*Resposta do sistema visto pelo terminal quando o código não foi validado de acordo com o template do professor*
 
 **RF04.3 Listar Submissões por Aluno**
 
 Permite ao Professor visualizar um histórico de todas as submissões feitas por um aluno específico para uma determinada atividade.
 
+<img src="./imagens/EduGit_Wireframe/Exercicios-Aluno.png" alt="Tela da visão do professor da atividade" style="max-width: 600px; height: auto; display: inline-block; margin: 10px;">
+
 **RF04.4 Download do Código Submetido**
 
 Permite ao Professor baixar o arquivo de código submetido por um aluno para análise manual, se necessário.
+
+<img src="./imagens/EduGit_Wireframe/Teste Detalhes.png" alt="Tela da visão do professor da atividade" style="max-width: 600px; height: auto; display: inline-block; margin: 10px;">
+
+```bash
+>>> edugit baixar atividade-maneira <nome do aluno>
+```
+*Comando CLI para baixar código de um aluno específico, de uma atividade específica*
 
 **[RF05] Executar Testes Automatizados**
 
@@ -321,13 +356,69 @@ Este requisito é o cerne da proposta de valor do EduGit, que é acelerar a corr
 
 Permite ao Professor fazer o upload ou definir o código dos testes unitários que serão usados para avaliar as submissões.
 
+<img src="./imagens/EduGit_Wireframe/Execicio Criacao.png" alt="Tela da visão do professor da atividade" style="max-width: 600px; height: auto; display: inline-block; margin: 10px;">
+
+*A inserção do código teste é realizado no mesmo local que a criação da ativdade, ou a edição dela*
+
 **RF05.2 Executar Testes no Servidor**
 
 O sistema deve ser capaz de rodar o código submetido pelo aluno em um ambiente seguro (sandbox) contra os testes unitários associados à atividade.
 
+O teste pode ser realizado das seguintes maneiras:
+
+1. Teste que não é armazenado em memória: comando é escrito no terminal na IDE compatível, o código é testado e o resultado é visualizado no terminal, podendo ver mais detalhes ao clicar no link. Esse teste não é armazenado a longo prazo na memória, o link da página é temporário.
+
+```bash
+>>> edugit testar atividade-maneira
+Enviando código...
+Testando código...
+Recebendo resultados...
+--------------------------------------
+:) Solução de acordo com o template do professor
+:) Solução retorna uma string
+:) Solução retorna "Daniel"
+:) Solução retorna "Carol"
+:( Esperava retorno com valor "Edilberto", não "Silva"
+Performance: 4/5
+-> Mais informações: https://edugit.com.br/testes/atividade-maneira123846513518
+```
+
+2. Teste armazenado em memória: se o professor não tiver especificado os testes como privado até a data de correção do exercício, o aluno também recebe os resultados dos testes pelo terminal. Dessa vez, os códigos ficam armazenados em memória, podendo visualizar sua Performance durante todo o semestre.
+
+```bash
+>>> edugit enviar atividade-maneira
+Enviando código...
+Analisando código...
+Código armazenado com sucesso!
+Recebendo resultados...
+--------------------------------------
+:) Solução de acordo com o template do professor
+:) Solução retorna uma string
+:) Solução retorna "Daniel"
+:) Solução retorna "Carol"
+:( Esperava retorno com valor "Edilberto", não "Silva"
+Performance: 4/5
+-> Mais informações: https://edugit.com.br/testes/atividade-maneira123846513518
+```
+
+3. Teste efetuado em uma data especificada pelo professor, é armazenado em memória: caso o professor tenha especificado os testes unitários como privados, eles só serão efetuados e a Performance publicada após uma data especificada pelo professor, de maneira automática. Dessa maneira, a Performance da sua Solução só pode ser visualizada na página do Moodle, ela não é enviada para o terminal do aluno.
+
+```bash
+>>> edugit enviar atividade-maneira
+Enviando código...
+Código armazenado com sucesso!
+A solução será corrigida em: 27/11/2025
+``` 
+*Mensagens no terminal após enviar a solução para uma atividade com os testes privados*
+
+
 **RF05.3 Gerar Relatórios de Testes**
 
 Após a execução, o sistema deve compilar um relatório detalhado indicando quais testes passaram e quais falharam, e a razão da falha.
+
+<img src="./imagens/EduGit_Wireframe/Teste Detalhes.png" alt="Tela da visão do professor da atividade" style="max-width: 600px; height: auto; display: inline-block; margin: 10px;">
+
+*Relatório gerado pelo sistema, disponível no Moodle*
 
 **RF05.4 Definir Casos de Testes**
 
