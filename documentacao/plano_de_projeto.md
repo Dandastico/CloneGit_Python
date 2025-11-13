@@ -948,6 +948,7 @@ Com base no número de testes unitários que passaram, o sistema deve calcular a
 ## 7. DIAGRAMA DE ATIVIDADES E FLUXOGRAMAS
 
 #### Fluxograma para envio das soluções
+
 ```mermaid
 flowchart TD
   A[Aluno abre terminal] --> B[Digita comando<br>'edugit enviar atividade1']
@@ -980,6 +981,8 @@ flowchart TD
   style N fill:#4caf50,color:white
   style G fill:#ffcdd2
 ```
+
+![Fluxograma de Envio de Solução sem Template](./imagens/Fluxograma/fluxograma_exSemTemplate.png)
 
 #### Flucograma para escrever as soluções seguindo template do professor
 ```mermaid
@@ -1017,6 +1020,8 @@ flowchart TD
   style P fill:#4caf50,color:white
   style O fill:#ffcdd2
 ```
+
+![Fluxograma de Envio da Solução com Template](./imagens/Fluxograma/fluxograma_exComTemplate.png)
 
 #### Fluxograma do Professor
 ```mermaid
