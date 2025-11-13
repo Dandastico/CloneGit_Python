@@ -1,6 +1,6 @@
 # EduGit – Plug-in do Moodle simulando Github
 ### Especificação e Protótipo
-Grupo nº X
+Grupo nº Infinito
 
 **Integrantes**
 Daniel Ferreira Alves - dandastico.bsb@gmail.com
@@ -88,7 +88,15 @@ Limitações:
   - RF05.4 - Definir Casos de Testes
   - RF05.5 - Calcular Pontuação Automática
 
-### 3.2. Escopo do projeto (Requisitos do Projeto)
+### 3.2. Requisitos do Projeto
+
+- RP01 - Delimitar o tema
+- RP02 - Definir a equipe
+- RP03 - Especificar atividades e Prazos
+- RP04 - Definir Responsabilidades (RACI)
+- RP05 - Gerenciar o acompanhamento do Projeto (kanban, Daily SCRUM, PO?)
+- RP06 - Atualizar o Plano de Projeto
+
 
 ## 4. DIAGRAMA DE CASO DE USO
 
