@@ -200,9 +200,30 @@ Verificação do e-mail para certificar de que o usuário é o verdadeiro propri
 
 Consultar Usuário Permite que o usuário visualize seus dados cadastrais.
 
+1. O usuário acessa a seção "Meu Perfil" nna barra de navegação da plataforma EduGit.
+2. O sistema exibe todas as informações do usuário selecionado, incluindo: nome completo, email, matrícula, tipo de usuário (aluno/professor), data de criação da conta, e status (ativo/inativo).
+3. O usuário pode optar por editar ou excluir o perfil (se tiver permissão).
+
+**Resultado Esperado:** O usuário consegue visualizar as informações do seu perfil de forma clara e organizada.
+
 **RF01.2 Cadastrar Usuário**
 
 Permite a criação de um novo registro de usuário no sistema, incluindo a coleta de e-mail e senha.
+
+1. O usuário acessa a página inicial do EduGit e clica no botão "Criar Conta".
+2. O sistema exibe um formulário de cadastro com os seguintes campos obrigatórios:
+  - Email institucional (domínio @senac-df.edu.br)
+  - Senha (com requisitos de segurança: mínimo 8 caracteres, incluindo letras maiúsculas, minúsculas, números e caracteres especiais)
+  - Confirmação de senha
+3. O usuário preenche todos os campos do formulário.
+4. O sistema valida os dados em tempo real (veja RF01.3 para detalhes de validação).
+5. Se todos os dados forem válidos, o usuário clica no botão "Criar Conta".
+6. O sistema cria um registro do usuário no banco de dados com status "Pendente de Validação de Email".
+7. O sistema envia um email de confirmação para o endereço fornecido, contendo um link de validação com validade de 24 horas.
+8. O usuário recebe uma mensagem na tela informando que um email de confirmação foi enviado.
+
+**Resultado Esperado:** Uma nova conta de usuário é criada e um email de confirmação é enviado para o endereço fornecido.
+
 
 <img src="./imagens/EduGit_Wireframe/Cadastro.png" alt="Tela 1" style="max-width: 600px; height: auto; display: inline-block; margin: 10px;">
 
@@ -210,11 +231,42 @@ Permite a criação de um novo registro de usuário no sistema, incluindo a cole
 
 Processo de segurança que envolve a de um link, enviado para o e-mail cadastrado pelo usuário, para confirmar o e-mail do usuário.
 
+1. Durante o cadastro (RF01.2), o usuário insere um endereço de email.
+
+2. O sistema valida o formato do email em tempo real, verificando se:
+  - O email contém um "@" seguido de um domínio válido.
+  - O domínio é "@senac-df.edu.br" (validação de domínio institucional).
+  - O email não está registrado em outra conta ativa no sistema.
+3. Se o email for inválido ou já registrado, o sistema exibe uma mensagem de erro clara (ex: "Email inválido" ou "Este email já está registrado").
+4. Se o email for válido, o usuário continua o processo de cadastro.
+5. Após a criação da conta, o sistema gera um token único de validação com validade de 24 horas.
+6. O sistema envia um email para o endereço fornecido contendo:
+  -Um link de confirmação (ex: https://edugit.senac-df.edu.br/validar-email?token=abc123xyz )
+  - Uma mensagem explicativa sobre a necessidade de validação.
+7. O usuário clica no link de confirmação no email.
+8. O sistema valida o token e marca o email como "Confirmado" no banco de dados.
+9. O usuário recebe uma mensagem de sucesso e pode fazer login normalmente.
+
+**Resultado Esperado:** O email do usuário é validado e confirmado, permitindo o acesso pleno à plataforma.
+
 <img src="./imagens/EduGit_Wireframe/Confirmar Email.png" alt="Tela 1" style="max-width: 600px; height: auto; display: inline-block; margin: 10px;">
 
 **RF01.4 Editar Usuário**
 
 Permite a modificação dos dados cadastrais de um usuário existente, como email e senha.
+
+1. O usuário acessa a seção "Meu Perfil" no menu da plataforma.
+2. O sistema exibe um formulário pré-preenchido com as informações atuais do usuário.
+3. O usuário identifica qual campo deseja modificar (ex: nome, email, senha).
+4. O usuário altera o(s) campo(s) desejado(s).
+5. Se o usuário alterar a senha, o sistema solicita a senha atual para confirmação de identidade.
+6. O usuário clica no botão "Salvar Alterações".
+7. O sistema valida os novos dados (aplicando as mesmas regras de validação de RF01.3 para email, se aplicável).
+8. Se houver erros de validação, o sistema exibe mensagens de erro específicas.
+9. Se os dados forem válidos, o sistema atualiza o registro do usuário no banco de dados.
+10. O usuário recebe uma mensagem de confirmação: "Perfil atualizado com sucesso".
+
+**Resultado Esperado:** As informações do usuário são atualizadas no sistema e refletidas imediatamente em seu perfil.
 
 <img src="./imagens/EduGit_Wireframe/Trocar Senha.png" alt="Tela 1" style="max-width: 600px; height: auto; display: inline-block; margin: 10px;">
 
@@ -235,11 +287,56 @@ Este requisito abrange o processo de autenticação do usuário no sistema, gara
 
 O sistema deve verificar se o e-mail e a senha fornecidos pelo usuário correspondem a um registro válido no banco de dados. A senha deve ser comparada após a criptografia.
 
+1. O usuário acessa a página de login do EduGit.
+2. O sistema exibe um formulário com dois campos: "Email" e "Senha".
+3. O usuário insere seu email institucional (ex: joao.silva@senac-df.edu.br).
+4. O usuário insere sua senha.
+5. O usuário clica no botão "Entrar".
+6. O sistema valida o email:
+  - Verifica se o email existe no banco de dados.
+  - Verifica se o email foi validado (confirmado via link de validação).
+  - Verifica se a conta está ativa (não foi excluída ou desativada).
+7. Se o email for inválido ou não encontrado, o sistema exibe a mensagem: "Email ou senha incorretos" (sem especificar qual é inválido, por segurança).
+8. Se o email for válido, o sistema valida a senha:
+  - Compara a senha fornecida com o hash armazenado no banco de dados.
+9. Se a senha for incorreta, o sistema exibe a mensagem: "Email ou senha incorretos".
+10. Se a senha for correta, o sistema:
+  - Cria uma sessão para o usuário.
+  - Armazena um token de autenticação (JWT ou similar) no navegador do usuário.
+  - Registra o login no histórico de atividades do usuário.
+  - Redireciona o usuário para o dashboard principal.
+
+**Resultado Esperado:** O usuário é autenticado e pode acessar a plataforma EduGit.
+
 <img src="./imagens/EduGit_Wireframe/LogIn.png" alt="Tela 1" style="max-width: 600px; height: auto; display: inline-block; margin: 10px;">
 
 **RF02.2 Redefinir Senha (esquecer a senha)**
 
 Permite que o usuário inicie um processo de recuperação de senha, geralmente envolvendo o envio de um link ou código de segurança para o e-mail cadastrado, para que possa definir uma nova senha.
+
+1. O usuário acessa a página de login e clica no link "Esqueci minha senha".
+2. O sistema exibe um formulário solicitando o email do usuário.
+3. O usuário insere seu email institucional.
+4. O usuário clica em "Enviar Link de Redefinição".
+5. O sistema verifica se o email existe no banco de dados:
+  - Se não existir, o sistema exibe a mensagem: "Se este email estiver registrado, você receberá um link de redefinição" (mensagem genérica por segurança).
+6. Se o email existir, o sistema:
+  - Gera um token único de redefinição de senha com validade de 1 hora.
+  - Envia um email para o usuário contendo:
+  - Um link de redefinição (ex: https://edugit.senac-df.edu.br/redefinir-senha?token=xyz789abc )
+  - Uma mensagem explicativa.
+  - Um aviso de que o link expira em 1 hora.
+7. O usuário recebe o email e clica no link de redefinição.
+8. O sistema valida o token:
+  - Verifica se o token é válido.
+  - Verifica se o token não expirou.
+9. Se o token for inválido ou expirado, o sistema exibe a mensagem: "Link inválido ou expirado. Solicite um novo link de redefinição".
+10. Se o token for válido, o sistema exibe um formulário para o usuário inserir uma nova senha.
+11. O usuário insere uma nova senha (seguindo os requisitos de segurança: mínimo 8 caracteres, incluindo letras maiúsculas, minúsculas, números e caracteres especiais).
+12. O usuário clica em "Redefinir Senha".
+13. O sistema valida a nova senha e a armazena no banco de dados (criptografada com hash).
+14. O sistema exibe a mensagem: "Senha redefinida com sucesso. Você pode fazer login com sua nova senha".
+15. O usuário é redirecionado para a página de login.
 
 <img src="./imagens/EduGit_Wireframe/Esqueceu Senha.png" alt="Tela 1" style="max-width: 600px; height: auto; display: inline-block; margin: 10px;">
 
@@ -266,13 +363,71 @@ Este requisito é fundamental para o lado do Professor, permitindo a criação d
 
 Permite ao Professor definir o título, descrição e parâmetros básicos de uma nova atividade.
 
+1. O professor acessa o menu "Atividades" e clica em "Criar Nova Atividade".
+2. O sistema exibe um formulário de criação com os seguintes campos:
+  - Título da Atividade (obrigatório): ex: "Implementar Função de Ordenação"
+  - Descrição (obrigatório): descrição detalhada do que o aluno deve fazer
+  - Linguagem de Programação (obrigatório): seleção entre Python, Java, C++, etc. (inicialmente apenas Python)
+  - Nível de Dificuldade (obrigatório): Fácil, Médio, Difícil
+  - Prazo de Entrega (obrigatório): data e hora limite para submissão
+  - Pontuação Máxima (obrigatório): valor em pontos (ex: 100)
+3. O professor preenche todos os campos obrigatórios.
+4. O professor clica em "Criar Atividade".
+5. O sistema valida os dados:
+  - Verifica se o título não está vazio.
+  - Verifica se a descrição tem no mínimo 50 caracteres.
+  - Verifica se o prazo é uma data futura.
+  - Verifica se a pontuação é um número positivo.
+6. Se houver erros de validação, o sistema exibe mensagens de erro específicas.
+7. Se os dados forem válidos, o sistema:
+  - Cria um novo registro de atividade no banco de dados com status "Rascunho".
+  - Redireciona o professor para a página de edição da atividade.
+  - Exibe a mensagem: "Atividade criada com sucesso. Agora você pode adicionar um template inicial e configurar testes".
+
+**Resultado Esperado:** Uma nova atividade é criada no sistema com status "Rascunho" e pronta para ser configurada.
+
 **RF03.2 Editar Atividade**
 
 Permite ao Professor modificar os detalhes de uma atividade que ainda não foi publicada ou que precisa de ajustes.
 
+1. O professor acessa o menu "Atividades" e seleciona uma atividade existente.
+2. O sistema exibe a página de detalhes da atividade com um botão "Editar".
+3. O professor clica em "Editar".
+4. O sistema exibe um formulário pré-preenchido com os dados atuais da atividade.
+5. O professor altera os campos desejados (título, descrição, prazo, pontuação, etc.).
+6. O professor clica em "Salvar Alterações".
+7. O sistema valida os dados (aplicando as mesmas regras de validação de RF03.1).
+8. Se houver erros, o sistema exibe mensagens de erro.
+9. Se os dados forem válidos, o sistema:
+  - Atualiza o registro da atividade no banco de dados.
+  - Exibe a mensagem: "Atividade atualizada com sucesso".
+  - Nota: Se a atividade já foi publicada, o professor recebe um aviso de que as alterações afetarão os alunos já inscritos.
+
+**Resultado Esperado:** Os detalhes da atividade são atualizados no sistema.
+
+
+
 **RF03.3 Excluir Atividade**
 
 Permite a remoção de uma atividade do sistema, desde que não haja submissões associadas ou que a exclusão seja permitida pelas regras de negócio.
+
+1. O professor acessa o menu "Atividades" e seleciona uma atividade.
+2. O sistema exibe a página de detalhes da atividade com um botão "Excluir".
+3. O professor clica em "Excluir".
+4. O sistema exibe um diálogo de confirmação: "Tem certeza que deseja excluir esta atividade? Esta ação é irreversível".
+5. Se a atividade já possui submissões de alunos, o sistema exibe um aviso adicional: "Esta atividade possui X submissões. Ao excluir, todos os dados serão removidos".
+6. O professor clica em "Confirmar Exclusão".
+7. O sistema:
+  - Remove o registro da atividade do banco de dados.
+  - Remove todas as submissões de código associadas à atividade.
+  - Remove todos os registros de testes executados para esta atividade.
+  - Mantém um registro de auditoria.
+8. O sistema exibe a mensagem: "Atividade excluída com sucesso".
+9. O professor é redirecionado para a lista de atividades.
+
+**Resultado Esperado:** A atividade é removida do sistema de forma irreversível.
+
+
 
 **RF03.4 Publicar/Ocultar Atividade**
 
