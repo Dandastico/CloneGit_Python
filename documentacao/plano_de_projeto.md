@@ -78,7 +78,7 @@ Limitações:
   - RF04.1 - Enviar Código via Terminal
   - RF04.2 - Validar Formato do Código
   - RF04.3 - Listar Submissões por Aluno
-  - RF04.4 - Download do Código Subetido
+  - RF04.4 - Download do Código Submetido
 
 
 - RF05 - Executar Testes Automatizados
