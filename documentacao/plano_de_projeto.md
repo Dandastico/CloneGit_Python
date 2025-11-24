@@ -88,6 +88,23 @@ Limitações:
   - RF05.4 - Definir Casos de Testes
   - RF05.5 - Calcular Pontuação Automática
 
+- RF06 - Gerenciar Repositório Local
+  - RF06.1 - Iniciar Repositório
+
+- RF07 - Gerenciar Área de Preparação (Staging)
+  - RF07.1 - Adicionar Arquivos para Preparação
+
+- RF08 - Gerenciar Histórico de Versões
+  - RF08.1 - Gravar Alterações (Commit)
+  - RF08.2 - Visualizar Histórico de Commits
+
+- RF09 - Gerenciar Ramificações (Branches)
+  - RF09.1 - Listar, Criar e Deletar Ramos
+  - RF09.2 - Migrar entre Ramos
+
+- RF10 - Inspecionar Estado do Repositório
+  - RF10.1 - Verificar Estado do Diretório de Trabalho
+
 ### 3.2. Requisitos do Projeto
 
 - RP01 - Delimitar o tema
@@ -944,6 +961,159 @@ Com base no número de testes unitários que passaram, o sistema deve calcular a
 
 **Resultado Esperado:** A pontuação do aluno é calculada automaticamente com base no desempenho nos testes.
 
+**[RF06]** Gerenciar Repositório Local
+
+Permitir que o usuário crie e gerencie um repositório local para controle de versão de seus arquivos de projeto.
+
+**Ator:** Aluno, Professor
+
+**Prioridade:**
+- (X) Essencial
+- () Importante
+- () Desejável
+
+**RF06.1 Iniciar Repositório (`iniciar`)**
+
+Permite a criação da estrutura de um novo repositório local.
+
+1. O usuário abre o terminal na pasta do seu projeto.
+2. O usuário executa o comando `python main.py iniciar`.
+3. O sistema verifica se um repositório `edugit` já existe no diretório atual.
+4. Se não existir, o sistema cria uma pasta chamada `edugit`.
+5. Dentro de `edugit`, o sistema cria a estrutura de subpastas (`objects`, `refs/heads`) e arquivos (`HEAD`, `index`) necessários para o controle de versão.
+6. O sistema exibe a mensagem: "Repositório Git vazio inicializado em /caminho/completo/edugit".
+
+**Resultado Esperado:** Um novo repositório local é criado e está pronto para rastrear arquivos.
+
+---
+
+**[RF07]** Gerenciar Área de Preparação (Staging)
+
+Permitir que o usuário selecione quais alterações nos arquivos devem ser incluídas no próximo commit.
+
+**Ator:** Aluno, Professor
+
+**Prioridade:**
+- (X) Essencial
+- () Importante
+- () Desejável
+
+**RF07.1 Adicionar Arquivos para Preparação (`adicionar`)**
+
+Adiciona o conteúdo de arquivos específicos à área de preparação (staging area ou index).
+
+1. O usuário modifica ou cria um ou mais arquivos no seu diretório de trabalho.
+2. O usuário executa o comando `python main.py adicionar <caminho_do_arquivo_1> <caminho_do_diretorio_2>`.
+3. Para cada caminho fornecido, o sistema lê o conteúdo do arquivo.
+4. O sistema calcula o hash SHA-1 do conteúdo (criando um objeto "blob").
+5. O sistema armazena o objeto blob na pasta `edugit/objects`.
+6. O sistema atualiza o arquivo `edugit/index` para mapear o caminho do arquivo ao seu hash correspondente.
+7. O sistema exibe a mensagem: "Adicionado <caminho_do_arquivo>".
+
+**Resultado Esperado:** As alterações nos arquivos especificados são preparadas e estarão inclusas no próximo commit.
+
+---
+
+**[RF08]** Gerenciar Histórico de Versões
+
+Permitir que o usuário salve snapshots do estado do projeto e visualize o histórico dessas alterações.
+
+**Ator:** Aluno, Professor
+
+**Prioridade:**
+- (X) Essencial
+- () Importante
+- () Desejável
+
+**RF08.1 Gravar Alterações (`gravar`)**
+
+Cria um novo commit com as alterações que foram adicionadas à área de preparação (staging).
+
+1. O usuário executa o comando `python main.py gravar -m "Sua mensagem de commit"`.
+2. O sistema verifica se há alterações na área de preparação (index) para serem commitadas.
+3. Se houver, o sistema cria um ou mais objetos "tree" a partir do index, representando a estrutura de diretórios do projeto.
+4. O sistema cria um objeto "commit", que aponta para a "tree" raiz e para o commit anterior (pai). O objeto commit também armazena a mensagem, autor e data.
+5. O hash do novo commit é calculado e o objeto é salvo em `edugit/objects`.
+6. O sistema atualiza o ponteiro do branch atual (ex: `edugit/refs/heads/master`) para apontar para o novo hash de commit.
+7. O sistema exibe a mensagem: "Commit <hash_do_commit> criado no branch <nome_do_branch>".
+
+**Resultado Esperado:** Um snapshot permanente das alterações preparadas é salvo no histórico do repositório.
+
+**RF08.2 Visualizar Histórico de Commits (`historico`)**
+
+Exibe a lista de commits realizados no branch atual, do mais recente para o mais antigo.
+
+1. O usuário executa o comando `python main.py historico`.
+2. O sistema localiza o hash do commit atual lendo o ponteiro do branch (ex: `refs/heads/master`).
+3. O sistema carrega o objeto do commit e exibe suas informações: hash, autor, data e mensagem.
+4. O sistema segue para o commit pai e repete o processo, navegando pelo histórico.
+5. A exibição continua até que não haja mais commits pais ou o limite de exibição seja atingido.
+
+**Resultado Esperado:** O usuário consegue visualizar o histórico de alterações do projeto.
+
+---
+
+**[RF09]** Gerenciar Ramificações (Branches)
+
+Permitir o trabalho em linhas de desenvolvimento isoladas (branches), podendo criá-las, deletá-las e alternar entre elas.
+
+**Ator:** Aluno, Professor
+
+**Prioridade:**
+- (X) Essencial
+- () Importante
+- () Desejável
+
+**RF09.1 Listar, Criar e Deletar Ramos (`ramo`)**
+
+Gerencia os branches do repositório.
+
+1. Para listar: O usuário executa `python main.py ramo`. O sistema lista todos os arquivos em `edugit/refs/heads` e marca o branch atual com um `*`.
+2. Para criar: O usuário executa `python main.py ramo <novo_nome>`. O sistema cria um novo arquivo de ponteiro em `edugit/refs/heads/<novo_nome>` apontando para o mesmo commit do branch atual.
+3. Para deletar: O usuário executa `python main.py ramo <nome_do_ramo> -d`. O sistema apaga o arquivo de ponteiro correspondente em `edugit/refs/heads`.
+
+**Resultado Esperado:** O usuário pode gerenciar diferentes linhas de desenvolvimento de forma organizada.
+
+**RF09.2 Migrar entre Ramos (`migrar`)**
+
+Altera o branch ativo e atualiza os arquivos no diretório de trabalho para corresponder ao estado do novo branch.
+
+1. O usuário executa o comando `python main.py migrar <nome_do_branch>`.
+2. O sistema verifica se existem alterações não commitadas que seriam perdidas. Se sim, a operação é abortada com um aviso.
+3. O sistema atualiza o arquivo `HEAD` para apontar para o novo branch (ex: `ref: refs/heads/<nome_do_branch>`).
+4. O sistema lê o commit apontado pelo novo branch e sua árvore de arquivos.
+5. O sistema limpa os arquivos do branch antigo e recria os arquivos e diretórios conforme o estado do commit do novo branch.
+6. O sistema exibe a mensagem: "Alternado para o branch <nome_do_branch>".
+
+**Resultado Esperado:** O diretório de trabalho do usuário é modificado para refletir o estado de um branch diferente.
+
+---
+
+**[RF10]** Inspecionar Estado do Repositório
+
+Permitir que o usuário visualize o estado atual do seu diretório de trabalho e da área de preparação.
+
+**Ator:** Aluno, Professor
+
+**Prioridade:**
+- (X) Essencial
+- () Importante
+- () Desejável
+
+**RF10.1 Verificar Estado do Diretório de Trabalho (`estado`)**
+
+Mostra o status dos arquivos no repositório.
+
+1. O usuário executa o comando `python main.py estado`.
+2. O sistema compara o estado de três "árvores": o último commit (HEAD), a área de preparação (index) e o diretório de trabalho atual.
+3. O sistema identifica e lista:
+    - Alterações a serem commitadas (arquivos diferentes entre o HEAD e o index).
+    - Alterações não preparadas para commit (arquivos diferentes entre o index e o diretório de trabalho).
+    - Arquivos não rastreados (arquivos no diretório de trabalho que não estão no index nem no HEAD).
+    - Arquivos deletados.
+4. As informações são exibidas de forma organizada para o usuário.
+
+**Resultado Esperado:** O usuário obtém uma visão clara de quais arquivos foram modificados, quais estão prontos para commit e quais ainda não estão sendo rastreados.
 
 ## 7. DIAGRAMA DE ATIVIDADES E FLUXOGRAMAS
 
